@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
 title: "自宅k8sにIngressをインストールする"
-pubDate: 2023-11-11
+pubDate: 2022-08-21
 description: "今回は自宅前回構築した自宅環境のk8sにIngressをインストールしていきます"
 author: "taamgo0224"
 image:
