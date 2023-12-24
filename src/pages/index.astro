@@ -1,9 +1,62 @@
 ---
+import { Image } from "astro:assets";
+import SocialMedias from "../components/SocialMedias.astro";
+import profileImg from "../images/portfolio-avatar.png";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/global.css";
-const pageTitle = "Home Page";
+
+const pageTitle = "Kazuki Ohki";
+
+const languages = ["Go", "Java", "JavaScript", "TypeScript", "Python"];
+const frameworks = ["Spring Boot", "React"];
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-  <h2>私の素晴らしいブログのサブタイトル</h2>
+<style>
+  div.container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  div.container h1 {
+    text-align: center;
+  }
+
+  div.container img {
+    margin: 0 auto;
+  }
+
+  div.container h2,
+  h3 {
+    text-align: center;
+  }
+
+  div.container ul {
+    margin: 0 auto;
+  }
+
+  div.container p {
+    margin: 0 auto;
+  }
+</style>
+
+<BaseLayout pagTitle={pageTitle}>
+  <div class="container">
+    <h1>{pageTitle}</h1>
+    <Image src={profileImg} alt="イメージアイコン" width={200} height={200} />
+    <SocialMedias />
+    <h2>Skill</h2>
+    <h3>Languages</h3>
+    <ul>
+      {languages.map((language) => <li>{language}</li>)}
+    </ul>
+    <h3>Framework/Library</h3>
+    <ul>
+      {frameworks.map((f) => <li>{f}</li>)}
+    </ul>
+    <h2>Career</h2>
+    <p>Comming soon</p>
+    <h2>Qualification</h2>
+    <p>none</p>
+  </div>
 </BaseLayout>
