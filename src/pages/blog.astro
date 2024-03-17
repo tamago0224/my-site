@@ -1,19 +1,78 @@
 ---
-import BlogPost from "../components/BlogPost.astro";
+import { Image } from "astro:assets";
+import thumbnail from '../images/thumbnail.jpg';
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/global.css";
 const allPosts = await Astro.glob("../pages/posts/*.md");
-const pageTitle = "私のAstro学習ブログ";
+const pageTitle = "たまごてっくブログ";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <div>
-    <ul>
+  <div class="container">
+    <ul class="item">
       {
         allPosts.map((post) => (
-          <BlogPost url={post.url} title={post.frontmatter.title} />
+          <li class="list">
+            <a href={post.url}>
+              <Image src={thumbnail} alt="ブログのサムネイル" />
+              <p class="publish">{post.frontmatter.pubDate}</p>
+              <h3 class="title">{post.frontmatter.title}</h3>
+            </a>
+          </li>
         ))
       }
     </ul>
   </div>
 </BaseLayout>
+
+<style>
+  div.container {
+    width: 100%;
+    padding: 10rem 1rem;
+  }
+
+  ul.item {
+    list-style: none;
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  li.list {
+    min-height: 300px;
+    background: #fff;
+    padding: 1.5rem 1rem;
+  }
+
+  div.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  p.publish {
+    line-height: 1.6;
+    color: #333;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #9a9696
+  }
+
+  h3.title {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  li.list a {
+    display: block;
+    transition: 0.2s;
+  }
+
+  li.list a:hover {
+    opacity: 0.7;
+  }
+
+  div
+</style>
