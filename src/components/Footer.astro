@@ -1,23 +1,10 @@
 ---
-
+import SocialMedias from "./SocialMedias.astro";
 ---
 
-<style>
-  footer {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-    text-align: center;
-    justify-content: center;
-  }
-
-  span.copyright {
-    color: gray;
-  }
-</style>
-
-<footer>
-  <div>
-    <span class="copyright">&copy; Kazuki Ohki 2023</span>
+<footer class="bg-gray-800 text-white py-6 mt-8">
+  <div class="container mx-auto flex flex-col items-center justify-center space-y-4">
+    <SocialMedias />
+    <p class="text-sm text-gray-400">&copy; Kazuki Ohki 2023</p>
   </div>
 </footer>

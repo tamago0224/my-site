@@ -1,4 +1,20 @@
 ---
-const {title, url} = Astro.props;
+const { title, url, pubDate, description, image, tags } = Astro.props;
 ---
-<li><a href={url}>{title}</a></li>
+<a href={url} class="block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out overflow-hidden">
+  {image && image.url && (
+    <img src={image.url} alt={image.alt || title} class="w-full h-48 object-cover" />
+  )}
+  <div class="p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-2">{title}</h2>
+    <p class="text-sm text-gray-500 mb-4">投稿日: {pubDate.slice(0, 10)}</p>
+    {description && <p class="text-gray-700 mb-4">{description}</p>}
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2">
+        {tags.map(tag => (
+          <span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>

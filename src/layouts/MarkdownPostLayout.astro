@@ -9,7 +9,7 @@ const allPosts = await Astro.glob('../pages/posts/*.md');
 const allTags = [...new Set(allPosts.flatMap(post => post.frontmatter.tags))];
 ---
 <BaseLayout pageTitle={frontmatter.title}>
-  <div class="md:flex md:gap-8">
+  <div class="flex flex-col md:flex-row md:gap-8">
     <main class="flex-grow">
       <p class="text-sm text-gray-500">投稿日: {frontmatter.pubDate.slice(0, 10)}</p>
       <p class="text-sm text-gray-500">著者: {frontmatter.author}</p>

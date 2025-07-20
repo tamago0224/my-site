@@ -11,52 +11,23 @@ const languages = ["Go", "Java", "JavaScript", "TypeScript", "Python"];
 const frameworks = ["Spring Boot", "React"];
 ---
 
-<style>
-  div.container {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-  }
-
-  div.container h1 {
-    text-align: center;
-  }
-
-  div.container img {
-    margin: 0 auto;
-  }
-
-  div.container h2,
-  h3 {
-    text-align: center;
-  }
-
-  div.container ul {
-    margin: 0 auto;
-  }
-
-  div.container p {
-    margin: 0 auto;
-  }
-</style>
-
 <BaseLayout pagTitle={pageTitle}>
-  <div class="container">
-    <h1>{pageTitle}</h1>
-    <Image src={profileImg} alt="イメージアイコン" width={200} height={200} />
+  <div class="flex flex-col items-center justify-center text-center">
+    <h1 class="text-4xl font-bold mb-4">{pageTitle}</h1>
+    <Image src={profileImg} alt="イメージアイコン" width={200} height={200} class="rounded-full mb-6" />
     <SocialMedias />
-    <h2>Skill</h2>
-    <h3>Languages</h3>
-    <ul>
-      {languages.map((language) => <li>{language}</li>)}
+    <h2 class="text-3xl font-semibold mt-8 mb-4">Skill</h2>
+    <h3 class="text-2xl font-medium mb-2">Languages</h3>
+    <ul class="list-disc list-inside mb-6">
+      {languages.map((language) => <li class="text-lg">{language}</li>)}
     </ul>
-    <h3>Framework/Library</h3>
-    <ul>
-      {frameworks.map((f) => <li>{f}</li>)}
+    <h3 class="text-2xl font-medium mb-2">Framework/Library</h3>
+    <ul class="list-disc list-inside mb-6">
+      {frameworks.map((f) => <li class="text-lg">{f}</li>)}
     </ul>
-    <h2>Career</h2>
-    <p>Comming soon</p>
-    <h2>Qualification</h2>
-    <p>none</p>
+    <h2 class="text-3xl font-semibold mt-8 mb-4">Career</h2>
+    <p class="text-lg">Comming soon</p>
+    <h2 class="text-3xl font-semibold mt-8 mb-4">Qualification</h2>
+    <p class="text-lg">none</p>
   </div>
 </BaseLayout>

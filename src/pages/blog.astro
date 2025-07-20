@@ -7,13 +7,11 @@ const pageTitle = "私のAstro学習ブログ";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <div>
-    <ul>
-      {
-        allPosts.map((post) => (
-          <BlogPost url={post.url} title={post.frontmatter.title} />
-        ))
-      }
-    </ul>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {
+      allPosts.map((post) => (
+        <BlogPost url={post.url} title={post.frontmatter.title} pubDate={post.frontmatter.pubDate} description={post.frontmatter.description} image={post.frontmatter.image} tags={post.frontmatter.tags} />
+      ))
+    }
   </div>
 </BaseLayout>
