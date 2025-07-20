@@ -9,105 +9,36 @@ const allPosts = await Astro.glob('../pages/posts/*.md');
 const allTags = [...new Set(allPosts.flatMap(post => post.frontmatter.tags))];
 ---
 <BaseLayout pageTitle={frontmatter.title}>
-  <div class="container">
-    <main class="content">
-      <p>投稿日: {frontmatter.pubDate.slice(0, 10)}</p>
-      <p>著者: {frontmatter.author}</p>
-      <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+  <div class="md:flex md:gap-8">
+    <main class="flex-grow">
+      <p class="text-sm text-gray-500">投稿日: {frontmatter.pubDate.slice(0, 10)}</p>
+      <p class="text-sm text-gray-500">著者: {frontmatter.author}</p>
+      <img src={frontmatter.image.url} class="my-4 rounded-lg" width="300" alt={frontmatter.image.alt} />
 
-      <div class="tags">
+      <div class="flex flex-wrap gap-2 my-4">
         {frontmatter.tags.map(tag => (
-          <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
+          <a href={`/tags/${tag}`} class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-full">{tag}</a>
         ))}
       </div>
-      <article>
+      <article class="prose max-w-none">
         <slot />
       </article>
     </main>
 
-    <aside class="sidebar">
-      <h3>最近の投稿</h3>
-      <ul>
+    <aside class="w-full md:w-1/4 mt-8 md:mt-0 md:border-l md:pl-8">
+      <h3 class="text-xl font-bold mb-4">最近の投稿</h3>
+      <ul class="space-y-2">
         {allPosts.sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()).slice(0, 5).map(post => (
-          <li><a href={post.url}>{post.frontmatter.title}</a></li>
+          <li><a href={post.url} class="text-blue-600 hover:underline">{post.frontmatter.title}</a></li>
         ))}
       </ul>
 
-      <h3>タグ一覧</h3>
-      <div class="tags">
+      <h3 class="text-xl font-bold mt-8 mb-4">タグ一覧</h3>
+      <div class="flex flex-wrap gap-2">
         {allTags.map(tag => (
-          <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
+          <a href={`/tags/${tag}`} class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-full">{tag}</a>
         ))}
       </div>
     </aside>
   </div>
 </BaseLayout>
-
-<style>
-  a {
-    color: #00539F;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0;
-    margin: 0.5rem 0;
-  }
-
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: .5em;
-    padding: .5em 1em;
-    font-size: 1.15em;
-    background-color: #F8FCFD;
-  }
-
-  .container {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .content {
-    flex: 3;
-  }
-
-  .sidebar {
-    flex: 1;
-    border-left: 1px solid #eee;
-    padding-left: 2rem;
-  }
-
-  .sidebar h3 {
-    font-size: 1.25em;
-    margin-top: 1rem;
-  }
-
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  .sidebar li {
-    margin-bottom: 0.5em;
-  }
-
-  /* スマートフォン向けのレスポンシブ対応 */
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-    }
-    .sidebar {
-      border-left: none;
-      border-top: 1px solid #eee;
-      padding-left: 0;
-      margin-top: 2rem;
-      padding-top: 2rem;
-    }
-  }
-</style>
