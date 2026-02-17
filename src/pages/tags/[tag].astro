@@ -25,7 +25,9 @@ const { posts } = Astro.props;
 ---
 
 <BaseLayout pageTitle={tag} browserTitle={`tamago tech - ${tag}`}>
-  <p class="text-xl font-semibold mb-4">{tag}のタグが付いた記事</p>
+  <p class="text-lg font-semibold mb-6 text-gray-600 dark:text-gray-400">
+    <span class="tag-badge text-base mr-2">{tag}</span> のタグが付いた記事
+  </p>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {
       posts.map((post) => (

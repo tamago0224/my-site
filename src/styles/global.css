@@ -1,3 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body {
+    @apply font-sans antialiased;
+  }
+
+  /* ダークモード スクロールバー */
+  .dark ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: #0f0f17;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #2a2a3e;
+    border-radius: 4px;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #3a3a5e;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-white/20 dark:border-white/10;
+  }
+
+  .glass-card {
+    @apply glass rounded-2xl shadow-lg dark:shadow-none;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent;
+  }
+
+  .tag-badge {
+    @apply text-xs font-medium px-3 py-1 rounded-full
+      bg-accent/10 text-accent dark:bg-accent-light/15 dark:text-accent-light
+      hover:bg-accent/20 dark:hover:bg-accent-light/25 transition-colors;
+  }
+
+  .nav-link {
+    @apply relative text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent-light
+      font-medium transition-colors duration-200;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-accent to-accent-secondary
+      transition-all duration-300;
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .section-fade-in {
+    @apply opacity-0 animate-fade-in-up;
+  }
+  
+  /* Markdown items responsive fix */
+  .prose img {
+    @apply rounded-xl shadow-md;
+  }
+  
+  .prose iframe {
+    @apply w-full rounded-xl shadow-md aspect-video;
+  }
+  
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    @apply border-collapse;
+  }
+  
+  .prose th, .prose td {
+    @apply px-4 py-2 border border-gray-200 dark:border-gray-700;
+  }
+  
+  .prose th {
+    @apply bg-gray-50 dark:bg-white/5;
+  }
+}

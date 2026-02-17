@@ -13,21 +13,51 @@ const frameworks = ["Spring Boot", "React"];
 
 <BaseLayout pageTitle={pageTitle} browserTitle="tamago tech">
   <div class="flex flex-col items-center justify-center text-center">
-    <h1 class="text-4xl font-bold mb-4">{pageTitle}</h1>
-    <Image src={profileImg} alt="イメージアイコン" width={200} height={200} class="rounded-full mb-6" />
+    <!-- Avatar with gradient ring -->
+    <div class="relative mb-8 animate-fade-in">
+      <div class="absolute -inset-1 bg-gradient-to-r from-accent to-accent-secondary rounded-full blur-sm opacity-75"></div>
+      <Image src={profileImg} alt="イメージアイコン" width={180} height={180} class="relative rounded-full border-4 border-white dark:border-surface-dark" />
+    </div>
+
     <SocialMedias />
-    <h2 class="text-3xl font-semibold mt-8 mb-4">Skill</h2>
-    <h3 class="text-2xl font-medium mb-2">Languages</h3>
-    <ul class="list-none mb-6">
-      {languages.map((language) => <li class="text-lg">{language}</li>)}
-    </ul>
-    <h3 class="text-2xl font-medium mb-2">Framework/Library</h3>
-    <ul class="list-none mb-6">
-      {frameworks.map((f) => <li class="text-lg">{f}</li>)}
-    </ul>
-    <h2 class="text-3xl font-semibold mt-8 mb-4">Career</h2>
-    <p class="text-lg">Comming soon</p>
-    <h2 class="text-3xl font-semibold mt-8 mb-4">Qualification</h2>
-    <p class="text-lg">none</p>
+
+    <!-- Skills Section -->
+    <section class="w-full max-w-2xl mt-10 animate-fade-in-up" style="animation-delay: 0.2s;">
+      <h2 class="text-2xl font-bold mb-6 gradient-text">Skill</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card p-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Languages</h3>
+          <div class="flex flex-wrap gap-2 justify-center">
+            {languages.map((lang) => (
+              <span class="px-4 py-2 rounded-xl text-sm font-medium bg-accent/10 text-accent dark:bg-accent-light/15 dark:text-accent-light">
+                {lang}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div class="glass-card p-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Framework / Library</h3>
+          <div class="flex flex-wrap gap-2 justify-center">
+            {frameworks.map((f) => (
+              <span class="px-4 py-2 rounded-xl text-sm font-medium bg-accent-secondary/10 text-accent-secondary dark:bg-accent-secondary-light/15 dark:text-accent-secondary-light">
+                {f}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career Section -->
+    <section class="w-full max-w-2xl mt-10 animate-fade-in-up" style="animation-delay: 0.4s;">
+      <h2 class="text-2xl font-bold mb-4 gradient-text">Career</h2>
+      <p class="text-gray-500 dark:text-gray-400">Coming soon</p>
+    </section>
+
+    <!-- Qualification Section -->
+    <section class="w-full max-w-2xl mt-10 animate-fade-in-up" style="animation-delay: 0.6s;">
+      <h2 class="text-2xl font-bold mb-4 gradient-text">Qualification</h2>
+      <p class="text-gray-500 dark:text-gray-400">none</p>
+    </section>
   </div>
 </BaseLayout>

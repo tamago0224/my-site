@@ -1,16 +1,26 @@
 ---
 import Hamburger from "./Hamburger.astro";
 import Navigation from "./Navigation.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 ---
 
-<header class="bg-white shadow-md py-4 px-8">
-  <nav class="container mx-auto flex justify-between items-center">
-    <a href="/" class="text-2xl font-bold text-gray-900">tamago tech</a>
-    <div class="hidden md:block">
-      <Navigation />
-    </div>
-    <div class="md:hidden">
-      <Hamburger />
+<header class="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-surface-dark/70 border-b border-white/20 dark:border-white/5 transition-colors duration-300">
+  <nav class="container mx-auto flex justify-between items-center py-4 px-6 md:px-8">
+    <a href="/" class="text-2xl font-extrabold gradient-text hover:opacity-80 transition-opacity">tamago tech</a>
+    <div class="flex items-center gap-4">
+      <div class="hidden md:block">
+        <Navigation />
+      </div>
+      <ThemeToggle />
+      <div class="md:hidden">
+        <Hamburger />
+      </div>
     </div>
   </nav>
+  <!-- Mobile nav menu -->
+  <div id="mobile-nav" class="hidden md:hidden border-t border-white/10 dark:border-white/5 animate-slide-down">
+    <div class="container mx-auto px-6 py-4">
+      <Navigation />
+    </div>
+  </div>
 </header>

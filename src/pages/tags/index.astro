@@ -6,10 +6,10 @@ const pageTitle = "タグ一覧";
 ---
 
 <BaseLayout pageTitle={pageTitle} browserTitle="tamago tech">
-  <div class="flex flex-wrap gap-2">
+  <div class="flex flex-wrap gap-3">
     {
       tags.map((tag) => (
-        <a href={`/tags/${tag}`} class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-full">{tag}</a>
+        <a href={`/tags/${tag}`} class="tag-badge text-base px-4 py-2">{tag}</a>
       ))
     }
   </div>
