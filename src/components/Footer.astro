@@ -2,10 +2,148 @@
 import SocialMedias from "./SocialMedias.astro";
 ---
 
-<footer class="mt-auto border-t border-gray-200 dark:border-white/10 transition-colors duration-300">
-  <div class="h-px bg-gradient-to-r from-transparent via-accent to-transparent"></div>
-  <div class="container mx-auto flex flex-col items-center justify-center space-y-4 py-8 px-6">
+<footer class="mt-auto border-t border-gray-200 dark:border-white/10 transition-colors duration-300 relative overflow-hidden footer-binary-wrapper">
+  <!-- Binary rain canvas -->
+  <canvas id="binaryCanvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-0 transition-opacity duration-500 binary-canvas" aria-hidden="true"></canvas>
+
+  <div class="h-px bg-gradient-to-r from-transparent via-accent to-transparent relative z-10"></div>
+  <div class="container mx-auto flex flex-col items-center justify-center space-y-4 py-8 px-6 relative z-10">
     <SocialMedias />
     <p class="text-sm text-gray-500 dark:text-gray-500">&copy; Kazuki Ohki 2023</p>
   </div>
 </footer>
+
+<style>
+  .footer-binary-wrapper {
+    min-height: 120px;
+  }
+
+  .binary-canvas {
+    transition: opacity 0.4s ease;
+  }
+
+  .footer-binary-wrapper:hover .binary-canvas {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const footer = document.querySelector('.footer-binary-wrapper') as HTMLElement | null;
+  const canvas = document.getElementById('binaryCanvas') as HTMLCanvasElement | null;
+
+  if (footer && canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const FONT_SIZE = 13;
+      const CHAR_UPDATE_INTERVAL = 20; // 文字を切り替えるフレーム間隔
+      let columns: number[] = [];
+      let chars: string[] = [];
+      let frameCount = 0;
+      let animFrameId: number | null = null;
+      let isHovering = false;
+
+      function resize() {
+        const rect = footer!.getBoundingClientRect();
+        canvas!.width = rect.width;
+        canvas!.height = rect.height;
+        const colCount = Math.floor(canvas!.width / FONT_SIZE);
+        columns = Array.from({ length: colCount }, () => Math.random() * -30);
+        chars = Array.from({ length: colCount }, () => Math.random() > 0.5 ? '1' : '0');
+      }
+
+      function getAccentColor(): string {
+        // tailwind accent color from CSS variable if available
+        const style = getComputedStyle(document.documentElement);
+        const accent = style.getPropertyValue('--color-accent').trim();
+        return accent || '#6c63ff';
+      }
+
+      function isDark(): boolean {
+        return document.documentElement.classList.contains('dark');
+      }
+
+      function draw() {
+        if (!ctx || !canvas) return;
+
+        frameCount++;
+        const shouldUpdateChar = frameCount % CHAR_UPDATE_INTERVAL === 0;
+
+        // Semi-transparent overlay for trail effect
+        const bg = isDark() ? 'rgba(10, 10, 20, 0.15)' : 'rgba(255, 255, 255, 0.15)';
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
+
+        columns.forEach((y, i) => {
+          // 一定フレームごとにのみ文字を更新
+          if (shouldUpdateChar) {
+            chars[i] = Math.random() > 0.5 ? '1' : '0';
+          }
+          const char = chars[i];
+          const x = i * FONT_SIZE;
+
+          const progress = y / (canvas!.height / FONT_SIZE);
+          const alpha = Math.min(1, 0.2 + progress * 0.6);
+
+          ctx.fillStyle = isDark()
+            ? `rgba(108, 99, 255, ${alpha})`
+            : `rgba(108, 99, 255, ${alpha * 0.7})`;
+
+          ctx.fillText(char, x, y * FONT_SIZE);
+
+          if (y * FONT_SIZE > canvas!.height && Math.random() > 0.975) {
+            columns[i] = 0;
+          }
+
+          columns[i] += 0.1;
+        });
+
+        animFrameId = requestAnimationFrame(draw);
+      }
+
+      function startAnimation() {
+        if (animFrameId !== null) return;
+        resize();
+        draw();
+      }
+
+      function stopAnimation() {
+        if (animFrameId !== null) {
+          cancelAnimationFrame(animFrameId);
+          animFrameId = null;
+        }
+        // Clear canvas
+        if (ctx && canvas) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        frameCount = 0;
+        // Reset columns for next hover
+        const colCount = Math.floor((canvas?.width ?? 0) / FONT_SIZE);
+        columns = Array.from({ length: colCount }, () => Math.random() * -30);
+        chars = Array.from({ length: colCount }, () => Math.random() > 0.5 ? '1' : '0');
+      }
+
+      footer.addEventListener('mouseenter', () => {
+        isHovering = true;
+        startAnimation();
+      });
+
+      footer.addEventListener('mouseleave', () => {
+        isHovering = false;
+        stopAnimation();
+      });
+
+      // Handle resize
+      const resizeObserver = new ResizeObserver(() => {
+        if (isHovering) {
+          stopAnimation();
+          startAnimation();
+        } else {
+          resize();
+        }
+      });
+      resizeObserver.observe(footer);
+    }
+  }
+</script>

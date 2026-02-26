@@ -4,8 +4,11 @@ import Navigation from "./Navigation.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 ---
 
-<header class="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-surface-dark/70 border-b border-white/20 dark:border-white/5 transition-colors duration-300">
-  <nav class="container mx-auto flex justify-between items-center py-4 px-6 md:px-8">
+<header class="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-surface-dark/70 border-b border-white/20 dark:border-white/5 transition-colors duration-300 relative overflow-hidden header-binary-wrapper">
+  <!-- Binary rain canvas -->
+  <canvas id="headerBinaryCanvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-0 transition-opacity duration-500 binary-canvas" aria-hidden="true"></canvas>
+
+  <nav class="container mx-auto flex justify-between items-center py-4 px-6 md:px-8 relative z-10">
     <a href="/" class="text-2xl font-extrabold gradient-text hover:opacity-80 transition-opacity">tamago tech</a>
     <div class="flex items-center gap-4">
       <div class="hidden md:block">
@@ -18,9 +21,126 @@ import ThemeToggle from "./ThemeToggle.astro";
     </div>
   </nav>
   <!-- Mobile nav menu -->
-  <div id="mobile-nav" class="hidden md:hidden border-t border-white/10 dark:border-white/5 animate-slide-down">
+  <div id="mobile-nav" class="hidden md:hidden border-t border-white/10 dark:border-white/5 animate-slide-down relative z-10">
     <div class="container mx-auto px-6 py-4">
       <Navigation />
     </div>
   </div>
 </header>
+
+<style>
+  .binary-canvas {
+    transition: opacity 0.4s ease;
+  }
+
+  .header-binary-wrapper:hover .binary-canvas {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const header = document.querySelector('.header-binary-wrapper') as HTMLElement | null;
+  const canvas = document.getElementById('headerBinaryCanvas') as HTMLCanvasElement | null;
+
+  if (header && canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const FONT_SIZE = 13;
+      const CHAR_UPDATE_INTERVAL = 20;
+      let columns: number[] = [];
+      let chars: string[] = [];
+      let frameCount = 0;
+      let animFrameId: number | null = null;
+      let isHovering = false;
+
+      function resize() {
+        const rect = header!.getBoundingClientRect();
+        canvas!.width = rect.width;
+        canvas!.height = rect.height;
+        const colCount = Math.floor(canvas!.width / FONT_SIZE);
+        columns = Array.from({ length: colCount }, () => Math.random() * -30);
+        chars = Array.from({ length: colCount }, () => Math.random() > 0.5 ? '1' : '0');
+      }
+
+      function isDark(): boolean {
+        return document.documentElement.classList.contains('dark');
+      }
+
+      function draw() {
+        if (!ctx || !canvas) return;
+
+        frameCount++;
+        const shouldUpdateChar = frameCount % CHAR_UPDATE_INTERVAL === 0;
+
+        const bg = isDark() ? 'rgba(10, 10, 20, 0.15)' : 'rgba(255, 255, 255, 0.15)';
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
+
+        columns.forEach((y, i) => {
+          if (shouldUpdateChar) {
+            chars[i] = Math.random() > 0.5 ? '1' : '0';
+          }
+          const char = chars[i];
+          const x = i * FONT_SIZE;
+          const progress = y / (canvas!.height / FONT_SIZE);
+          const alpha = Math.min(1, 0.2 + progress * 0.6);
+
+          ctx.fillStyle = isDark()
+            ? `rgba(108, 99, 255, ${alpha})`
+            : `rgba(108, 99, 255, ${alpha * 0.7})`;
+
+          ctx.fillText(char, x, y * FONT_SIZE);
+
+          if (y * FONT_SIZE > canvas!.height && Math.random() > 0.975) {
+            columns[i] = 0;
+          }
+          columns[i] += 0.1;
+        });
+
+        animFrameId = requestAnimationFrame(draw);
+      }
+
+      function startAnimation() {
+        if (animFrameId !== null) return;
+        resize();
+        draw();
+      }
+
+      function stopAnimation() {
+        if (animFrameId !== null) {
+          cancelAnimationFrame(animFrameId);
+          animFrameId = null;
+        }
+        if (ctx && canvas) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        frameCount = 0;
+        const colCount = Math.floor((canvas?.width ?? 0) / FONT_SIZE);
+        columns = Array.from({ length: colCount }, () => Math.random() * -30);
+        chars = Array.from({ length: colCount }, () => Math.random() > 0.5 ? '1' : '0');
+      }
+
+      header.addEventListener('mouseenter', () => {
+        isHovering = true;
+        startAnimation();
+      });
+
+      header.addEventListener('mouseleave', () => {
+        isHovering = false;
+        stopAnimation();
+      });
+
+      const resizeObserver = new ResizeObserver(() => {
+        if (isHovering) {
+          stopAnimation();
+          startAnimation();
+        } else {
+          resize();
+        }
+      });
+      resizeObserver.observe(header);
+    }
+  }
+</script>
