@@ -9,39 +9,55 @@ const allPosts = await Astro.glob('../pages/posts/*.md');
 const allTags = [...new Set(allPosts.flatMap(post => post.frontmatter.tags))];
 ---
 <BaseLayout pageTitle={frontmatter.title}>
-  <div class="flex flex-col md:flex-row md:gap-10">
+  <div class="flex flex-col md:flex-row md:gap-8">
     <main class="flex-grow min-w-0">
-      <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
-        <span>📅 {frontmatter.pubDate.slice(0, 10)}</span>
-        <span>✍️ {frontmatter.author}</span>
+      <!-- メタ情報 -->
+      <div class="flex items-center gap-4 text-xs text-term-gray dark:text-term-gray mb-4 font-mono">
+        <span><span class="text-accent/60 dark:text-accent-light/40">date:</span> {frontmatter.pubDate.slice(0, 10)}</span>
+        <span><span class="text-accent/60 dark:text-accent-light/40">by:</span> {frontmatter.author}</span>
       </div>
-      <img src={frontmatter.image.url} class="my-4 rounded-2xl shadow-md" width="300" alt={frontmatter.image.alt} />
+
+      <img src={frontmatter.image.url} class="my-4 border border-term-border-light dark:border-term-border" width="300" alt={frontmatter.image.alt} />
 
       <div class="flex flex-wrap gap-2 my-4">
         {frontmatter.tags.map(tag => (
           <a href={`/tags/${tag}`} class="tag-badge">{tag}</a>
         ))}
       </div>
-      <article class="prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-accent dark:prose-a:text-accent-light">
+
+      <article class="prose dark:prose-invert max-w-none
+        prose-headings:font-mono prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+        prose-a:text-accent dark:prose-a:text-accent-light prose-a:no-underline hover:prose-a:underline
+        prose-code:text-accent dark:prose-code:text-accent-light prose-code:bg-term-bg-card-dark/10 dark:prose-code:bg-term-bg-card-dark
+        prose-pre:bg-term-bg-card-dark dark:prose-pre:bg-term-bg-card-dark prose-pre:border prose-pre:border-term-border prose-pre:rounded-none
+        prose-blockquote:border-l-accent dark:prose-blockquote:border-l-accent-light">
         <slot />
       </article>
     </main>
 
-    <aside class="w-full md:w-72 shrink-0 mt-10 md:mt-0">
-      <div class="glass-card p-6 sticky top-24">
-        <h3 class="text-lg font-bold mb-4 gradient-text">最近の投稿</h3>
-        <ul class="space-y-3">
-          {allPosts.sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()).slice(0, 5).map(post => (
-            <li>
-              <a href={post.url} class="text-sm text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent-light transition-colors">
-                {post.frontmatter.title}
-              </a>
-            </li>
-          ))}
+    <!-- サイドバー -->
+    <aside class="w-full md:w-64 shrink-0 mt-10 md:mt-0">
+      <div class="term-card p-4 sticky top-24">
+        <h3 class="text-xs font-bold mb-3 text-accent dark:text-accent-light uppercase tracking-widest">
+          <span class="text-term-gray dark:text-term-gray mr-1">$</span> recent --posts
+        </h3>
+        <ul class="space-y-2">
+          {allPosts
+            .sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf())
+            .slice(0, 5)
+            .map(post => (
+              <li>
+                <a href={post.url} class="text-xs text-term-gray dark:text-term-gray hover:text-accent dark:hover:text-accent-light transition-colors leading-relaxed block">
+                  <span class="text-accent/50 dark:text-accent-light/40">▸ </span>{post.frontmatter.title}
+                </a>
+              </li>
+            ))}
         </ul>
 
-        <h3 class="text-lg font-bold mt-8 mb-4 gradient-text">タグ一覧</h3>
-        <div class="flex flex-wrap gap-2">
+        <h3 class="text-xs font-bold mt-6 mb-3 text-accent dark:text-accent-light uppercase tracking-widest">
+          <span class="text-term-gray dark:text-term-gray mr-1">$</span> tags --all
+        </h3>
+        <div class="flex flex-wrap gap-1.5">
           {allTags.map(tag => (
             <a href={`/tags/${tag}`} class="tag-badge">{tag}</a>
           ))}

@@ -2,14 +2,16 @@
 import SocialMedias from "./SocialMedias.astro";
 ---
 
-<footer class="mt-auto border-t border-gray-200 dark:border-white/10 transition-colors duration-300 relative overflow-hidden footer-binary-wrapper">
+<footer class="mt-auto border-t border-term-border-light dark:border-term-border transition-colors duration-300 relative overflow-hidden footer-binary-wrapper">
   <!-- Binary rain canvas -->
   <canvas id="binaryCanvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-0 transition-opacity duration-500 binary-canvas" aria-hidden="true"></canvas>
 
-  <div class="h-px bg-gradient-to-r from-transparent via-accent to-transparent relative z-10"></div>
+  <div class="h-px bg-gradient-to-r from-transparent via-accent to-transparent dark:via-accent-light relative z-10"></div>
   <div class="container mx-auto flex flex-col items-center justify-center space-y-4 py-8 px-6 relative z-10">
     <SocialMedias />
-    <p class="text-sm text-gray-500 dark:text-gray-500">&copy; Kazuki Ohki 2023</p>
+    <p class="text-xs font-mono text-term-gray dark:text-term-gray">
+      <span class="text-accent/60 dark:text-accent-light/50">// </span>&copy; Kazuki Ohki 2023
+    </p>
   </div>
 </footer>
 
@@ -35,7 +37,7 @@ import SocialMedias from "./SocialMedias.astro";
     const ctx = canvas.getContext('2d');
     if (ctx) {
       const FONT_SIZE = 13;
-      const CHAR_UPDATE_INTERVAL = 20; // 文字を切り替えるフレーム間隔
+      const CHAR_UPDATE_INTERVAL = 20;
       let columns: number[] = [];
       let chars: string[] = [];
       let frameCount = 0;
@@ -51,13 +53,6 @@ import SocialMedias from "./SocialMedias.astro";
         chars = Array.from({ length: colCount }, () => Math.random() > 0.5 ? '1' : '0');
       }
 
-      function getAccentColor(): string {
-        // tailwind accent color from CSS variable if available
-        const style = getComputedStyle(document.documentElement);
-        const accent = style.getPropertyValue('--color-accent').trim();
-        return accent || '#6c63ff';
-      }
-
       function isDark(): boolean {
         return document.documentElement.classList.contains('dark');
       }
@@ -68,15 +63,13 @@ import SocialMedias from "./SocialMedias.astro";
         frameCount++;
         const shouldUpdateChar = frameCount % CHAR_UPDATE_INTERVAL === 0;
 
-        // Semi-transparent overlay for trail effect
-        const bg = isDark() ? 'rgba(10, 10, 20, 0.15)' : 'rgba(255, 255, 255, 0.15)';
+        const bg = isDark() ? 'rgba(13, 17, 23, 0.18)' : 'rgba(249, 250, 251, 0.18)';
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
+        ctx.font = `${FONT_SIZE}px 'JetBrains Mono', monospace`;
 
         columns.forEach((y, i) => {
-          // 一定フレームごとにのみ文字を更新
           if (shouldUpdateChar) {
             chars[i] = Math.random() > 0.5 ? '1' : '0';
           }
@@ -84,11 +77,12 @@ import SocialMedias from "./SocialMedias.astro";
           const x = i * FONT_SIZE;
 
           const progress = y / (canvas!.height / FONT_SIZE);
-          const alpha = Math.min(1, 0.2 + progress * 0.6);
+          const alpha = Math.min(1, 0.15 + progress * 0.6);
 
+          // グリーン系カラー
           ctx.fillStyle = isDark()
-            ? `rgba(108, 99, 255, ${alpha})`
-            : `rgba(108, 99, 255, ${alpha * 0.7})`;
+            ? `rgba(74, 222, 128, ${alpha})`
+            : `rgba(34, 197, 94, ${alpha * 0.65})`;
 
           ctx.fillText(char, x, y * FONT_SIZE);
 
@@ -113,12 +107,10 @@ import SocialMedias from "./SocialMedias.astro";
           cancelAnimationFrame(animFrameId);
           animFrameId = null;
         }
-        // Clear canvas
         if (ctx && canvas) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
         frameCount = 0;
-        // Reset columns for next hover
         const colCount = Math.floor((canvas?.width ?? 0) / FONT_SIZE);
         columns = Array.from({ length: colCount }, () => Math.random() * -30);
         chars = Array.from({ length: colCount }, () => Math.random() > 0.5 ? '1' : '0');
@@ -134,7 +126,6 @@ import SocialMedias from "./SocialMedias.astro";
         stopAnimation();
       });
 
-      // Handle resize
       const resizeObserver = new ResizeObserver(() => {
         if (isHovering) {
           stopAnimation();

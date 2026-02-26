@@ -12,35 +12,39 @@ const frameworks = ["Spring Boot", "React"];
 ---
 
 <BaseLayout pageTitle={pageTitle} browserTitle="tamago tech">
-  <div class="flex flex-col items-center justify-center text-center">
-    <!-- Avatar with gradient ring -->
-    <div class="relative mb-8 animate-fade-in">
-      <div class="absolute -inset-1 bg-gradient-to-r from-accent to-accent-secondary rounded-full blur-sm opacity-75"></div>
-      <Image src={profileImg} alt="イメージアイコン" width={180} height={180} class="relative rounded-full border-4 border-white dark:border-surface-dark" />
+  <div class="flex flex-col items-center justify-center text-center font-mono">
+
+    <!-- Avatar -->
+    <div class="relative mb-6 animate-fade-in">
+      <div class="p-0.5 border-2 border-accent dark:border-accent-light inline-block">
+        <Image src={profileImg} alt="イメージアイコン" width={160} height={160} class="block grayscale hover:grayscale-0 transition-all duration-500" />
+      </div>
     </div>
 
     <SocialMedias />
 
     <!-- Skills Section -->
-    <section class="w-full max-w-2xl mt-10 animate-fade-in-up" style="animation-delay: 0.2s;">
-      <h2 class="text-2xl font-bold mb-6 gradient-text">Skill</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-6">
-          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Languages</h3>
-          <div class="flex flex-wrap gap-2 justify-center">
+    <section class="w-full max-w-2xl mt-10 animate-fade-in-up text-left" style="animation-delay: 0.1s;">
+      <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
+        <span class="text-term-gray dark:text-term-gray mr-1">$</span> skills --list
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="term-card p-4">
+          <h3 class="text-sm font-semibold mb-3 text-gray-500 dark:text-term-gray uppercase tracking-widest">// Languages</h3>
+          <div class="flex flex-wrap gap-2">
             {languages.map((lang) => (
-              <span class="px-4 py-2 rounded-xl text-sm font-medium bg-accent/10 text-accent dark:bg-accent-light/15 dark:text-accent-light">
-                {lang}
+              <span class="px-2 py-0.5 border border-accent/40 dark:border-accent-light/40 text-accent dark:text-accent-light text-xs font-mono">
+                {lang.toLowerCase()}
               </span>
             ))}
           </div>
         </div>
-        <div class="glass-card p-6">
-          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Framework / Library</h3>
-          <div class="flex flex-wrap gap-2 justify-center">
+        <div class="term-card p-4">
+          <h3 class="text-sm font-semibold mb-3 text-gray-500 dark:text-term-gray uppercase tracking-widest">// Frameworks</h3>
+          <div class="flex flex-wrap gap-2">
             {frameworks.map((f) => (
-              <span class="px-4 py-2 rounded-xl text-sm font-medium bg-accent-secondary/10 text-accent-secondary dark:bg-accent-secondary-light/15 dark:text-accent-secondary-light">
-                {f}
+              <span class="px-2 py-0.5 border border-accent-secondary/40 dark:border-accent-secondary-light/40 text-accent-secondary dark:text-accent-secondary-light text-xs font-mono">
+                {f.toLowerCase()}
               </span>
             ))}
           </div>
@@ -49,15 +53,27 @@ const frameworks = ["Spring Boot", "React"];
     </section>
 
     <!-- Career Section -->
-    <section class="w-full max-w-2xl mt-10 animate-fade-in-up" style="animation-delay: 0.4s;">
-      <h2 class="text-2xl font-bold mb-4 gradient-text">Career</h2>
-      <p class="text-gray-500 dark:text-gray-400">Coming soon</p>
+    <section class="w-full max-w-2xl mt-8 animate-fade-in-up text-left" style="animation-delay: 0.2s;">
+      <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
+        <span class="text-term-gray dark:text-term-gray mr-1">$</span> career --show
+      </h2>
+      <div class="term-card p-4">
+        <p class="text-sm text-term-gray dark:text-term-gray">
+          <span class="text-accent/50 dark:text-accent-light/40">// </span>Coming soon
+        </p>
+      </div>
     </section>
 
     <!-- Qualification Section -->
-    <section class="w-full max-w-2xl mt-10 animate-fade-in-up" style="animation-delay: 0.6s;">
-      <h2 class="text-2xl font-bold mb-4 gradient-text">Qualification</h2>
-      <p class="text-gray-500 dark:text-gray-400">none</p>
+    <section class="w-full max-w-2xl mt-8 animate-fade-in-up text-left" style="animation-delay: 0.3s;">
+      <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
+        <span class="text-term-gray dark:text-term-gray mr-1">$</span> qualification --show
+      </h2>
+      <div class="term-card p-4">
+        <p class="text-sm text-term-gray dark:text-term-gray">
+          <span class="text-accent/50 dark:text-accent-light/40">// </span>none
+        </p>
+      </div>
     </section>
   </div>
 </BaseLayout>
