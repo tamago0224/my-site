@@ -1,12 +1,19 @@
 ---
 const { title, url, pubDate, description, image, tags } = Astro.props;
 ---
+
 <a href={url} class="group block term-card overflow-hidden hover:border-accent dark:hover:border-accent-light transition-colors duration-200">
-  {image && image.url && (
-    <div class="overflow-hidden border-b border-term-border-light dark:border-term-border">
-      <img src={image.url} alt={image.alt || title} class="w-full h-44 object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+  <div class="h-44 bg-term-bg-dark border-b border-term-border flex items-center justify-center relative overflow-hidden">
+    <!-- グリッド背景 -->
+    <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(#4ade80 1px, transparent 1px), linear-gradient(90deg, #4ade80 1px, transparent 1px); background-size: 20px 20px;"></div>
+    
+    <div class="text-center z-10 font-mono">
+      <div class="text-4xl text-term-gray mb-2 animate-pulse">[ .MD ]</div>
+      <div class="text-xs text-accent/50 group-hover:text-accent transition-colors tracking-widest uppercase">
+        {url.split('/').filter(Boolean).pop()}
+      </div>
     </div>
-  )}
+  </div>
   <div class="p-5">
     <p class="text-xs text-term-gray dark:text-term-gray mb-2 font-mono">
       <span class="text-accent/50 dark:text-accent-light/40">date: </span>{pubDate.slice(0, 10)}
@@ -16,7 +23,7 @@ const { title, url, pubDate, description, image, tags } = Astro.props;
     </h2>
     {description && <p class="text-xs text-term-gray dark:text-term-gray mb-3 line-clamp-2 leading-relaxed">{description}</p>}
     {tags && tags.length > 0 && (
-      <div class="flex flex-wrap gap-1.5">
+      <div class="flex flex-wrap gap-1.5 mt-2">
         {tags.map(tag => (
           <span class="tag-badge">{tag}</span>
         ))}
