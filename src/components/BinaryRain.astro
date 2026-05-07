@@ -1,0 +1,127 @@
+---
+const { class: className = "" } = Astro.props;
+---
+
+<canvas
+  class={`absolute inset-0 h-full w-full pointer-events-none opacity-0 transition-opacity duration-500 binary-rain-canvas ${className}`}
+  data-binary-rain-canvas
+  aria-hidden="true"></canvas>
+
+<script>
+  const FONT_SIZE = 13;
+  const CHAR_UPDATE_INTERVAL = 20;
+
+  function initBinaryRain(canvas: HTMLCanvasElement) {
+    if (canvas.dataset.binaryRainReady === "true") return;
+    canvas.dataset.binaryRainReady = "true";
+
+    const wrapper = canvas.closest("[data-binary-rain]") as HTMLElement | null;
+    const ctx = canvas.getContext("2d");
+    if (!wrapper || !ctx) return;
+
+    let columns: number[] = [];
+    let chars: string[] = [];
+    let frameCount = 0;
+    let animFrameId: number | null = null;
+    let isHovering = false;
+
+    function resize() {
+      const rect = wrapper!.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      const colCount = Math.floor(canvas.width / FONT_SIZE);
+      columns = Array.from({ length: colCount }, () => Math.random() * -30);
+      chars = Array.from({ length: colCount }, randomBinaryChar);
+    }
+
+    function randomBinaryChar() {
+      return Math.random() > 0.5 ? "1" : "0";
+    }
+
+    function isDark() {
+      return document.documentElement.classList.contains("dark");
+    }
+
+    function resetColumns() {
+      frameCount = 0;
+      const colCount = Math.floor(canvas.width / FONT_SIZE);
+      columns = Array.from({ length: colCount }, () => Math.random() * -30);
+      chars = Array.from({ length: colCount }, randomBinaryChar);
+    }
+
+    function draw() {
+      frameCount++;
+      const shouldUpdateChar = frameCount % CHAR_UPDATE_INTERVAL === 0;
+
+      ctx.fillStyle = isDark()
+        ? "rgba(13, 17, 23, 0.18)"
+        : "rgba(249, 250, 251, 0.18)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `${FONT_SIZE}px 'JetBrains Mono', monospace`;
+
+      columns.forEach((y, i) => {
+        if (shouldUpdateChar) chars[i] = randomBinaryChar();
+
+        const progress = y / (canvas.height / FONT_SIZE);
+        const alpha = Math.min(1, 0.15 + progress * 0.6);
+        ctx.fillStyle = isDark()
+          ? `rgba(74, 222, 128, ${alpha})`
+          : `rgba(34, 197, 94, ${alpha * 0.65})`;
+        ctx.fillText(chars[i], i * FONT_SIZE, y * FONT_SIZE);
+
+        if (y * FONT_SIZE > canvas.height && Math.random() > 0.975) {
+          columns[i] = 0;
+        }
+        columns[i] += 0.1;
+      });
+
+      animFrameId = requestAnimationFrame(draw);
+    }
+
+    function startAnimation() {
+      if (animFrameId !== null) return;
+      resize();
+      draw();
+    }
+
+    function stopAnimation() {
+      if (animFrameId !== null) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      resetColumns();
+    }
+
+    wrapper.addEventListener("mouseenter", () => {
+      isHovering = true;
+      startAnimation();
+    });
+
+    wrapper.addEventListener("mouseleave", () => {
+      isHovering = false;
+      stopAnimation();
+    });
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (isHovering) {
+        stopAnimation();
+        startAnimation();
+      } else {
+        resize();
+      }
+    });
+    resizeObserver.observe(wrapper);
+    resize();
+  }
+
+  function initBinaryRainCanvases() {
+    document
+      .querySelectorAll<HTMLCanvasElement>("[data-binary-rain-canvas]")
+      .forEach(initBinaryRain);
+  }
+
+  initBinaryRainCanvases();
+  document.addEventListener("astro:after-swap", initBinaryRainCanvases);
+</script>

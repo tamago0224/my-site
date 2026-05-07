@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-const allPosts = await Astro.glob("../posts/*.md");
-const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
+import { getAllPosts, getPostTags } from "../../lib/posts";
+
+const tags = getPostTags(getAllPosts());
 const pageTitle = "タグ一覧";
 ---
 
@@ -9,7 +10,9 @@ const pageTitle = "タグ一覧";
   <div class="flex flex-wrap gap-3">
     {
       tags.map((tag) => (
-        <a href={`/tags/${tag}`} class="tag-badge text-base px-4 py-2">{tag}</a>
+        <a href={`/tags/${tag}`} class="tag-badge text-base px-4 py-2">
+          {tag}
+        </a>
       ))
     }
   </div>

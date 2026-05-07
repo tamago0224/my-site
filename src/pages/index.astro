@@ -1,9 +1,10 @@
 ---
 import { Image } from "astro:assets";
+import SkillGroup from "../components/SkillGroup.astro";
 import SocialMedias from "../components/SocialMedias.astro";
+import TerminalSection from "../components/TerminalSection.astro";
 import profileImg from "../images/portfolio-avatar.png";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import "../styles/global.css";
 
 const pageTitle = "Profile";
 
@@ -13,67 +14,59 @@ const frameworks = ["Spring Boot", "React"];
 
 <BaseLayout pageTitle={pageTitle} browserTitle="tamago tech">
   <div class="flex flex-col items-center justify-center text-center font-mono">
-
     <!-- Avatar -->
     <div class="relative mb-6 animate-fade-in">
-      <div class="p-0.5 border-2 border-accent dark:border-accent-light inline-block">
-        <Image src={profileImg} alt="イメージアイコン" width={160} height={160} class="block transition-all duration-500" />
+      <div
+        class="p-0.5 border-2 border-accent dark:border-accent-light inline-block"
+      >
+        <Image
+          src={profileImg}
+          alt="イメージアイコン"
+          width={160}
+          height={160}
+          class="block transition-all duration-500"
+        />
       </div>
     </div>
 
     <SocialMedias />
 
-    <!-- Skills Section -->
-    <section class="w-full max-w-2xl mt-10 animate-fade-in-up text-left" style="animation-delay: 0.1s;">
-      <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
-        <span class="text-term-gray dark:text-term-gray mr-1">$</span> skills --list
-      </h2>
+    <TerminalSection
+      command="skills --list"
+      class="mt-10"
+      style="animation-delay: 0.1s;"
+    >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="term-card p-4">
-          <h3 class="text-sm font-semibold mb-3 text-gray-500 dark:text-term-gray uppercase tracking-widest">// Languages</h3>
-          <div class="flex flex-wrap gap-2">
-            {languages.map((lang) => (
-              <span class="px-2 py-0.5 border border-accent/40 dark:border-accent-light/40 text-accent dark:text-accent-light text-xs font-mono">
-                {lang.toLowerCase()}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div class="term-card p-4">
-          <h3 class="text-sm font-semibold mb-3 text-gray-500 dark:text-term-gray uppercase tracking-widest">// Frameworks</h3>
-          <div class="flex flex-wrap gap-2">
-            {frameworks.map((f) => (
-              <span class="px-2 py-0.5 border border-accent-secondary/40 dark:border-accent-secondary-light/40 text-accent-secondary dark:text-accent-secondary-light text-xs font-mono">
-                {f.toLowerCase()}
-              </span>
-            ))}
-          </div>
-        </div>
+        <SkillGroup title="Languages" items={languages} />
+        <SkillGroup title="Frameworks" items={frameworks} variant="secondary" />
       </div>
-    </section>
+    </TerminalSection>
 
     <!-- Career Section -->
-    <section class="w-full max-w-2xl mt-8 animate-fade-in-up text-left" style="animation-delay: 0.2s;">
-      <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
-        <span class="text-term-gray dark:text-term-gray mr-1">$</span> career --show
-      </h2>
+    <TerminalSection
+      command="career --show"
+      class="mt-8"
+      style="animation-delay: 0.2s;"
+    >
       <div class="term-card p-4">
         <p class="text-sm text-term-gray dark:text-term-gray">
-          <span class="text-accent/50 dark:text-accent-light/40">// </span>Coming soon
+          <span class="text-accent/50 dark:text-accent-light/40">//</span>Coming
+          soon
         </p>
       </div>
-    </section>
+    </TerminalSection>
 
     <!-- Qualification Section -->
-    <section class="w-full max-w-2xl mt-8 animate-fade-in-up text-left" style="animation-delay: 0.3s;">
-      <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
-        <span class="text-term-gray dark:text-term-gray mr-1">$</span> qualification --show
-      </h2>
+    <TerminalSection
+      command="qualification --show"
+      class="mt-8"
+      style="animation-delay: 0.3s;"
+    >
       <div class="term-card p-4">
         <p class="text-sm text-term-gray dark:text-term-gray">
-          <span class="text-accent/50 dark:text-accent-light/40">// </span>none
+          <span class="text-accent/50 dark:text-accent-light/40">//</span>none
         </p>
       </div>
-    </section>
+    </TerminalSection>
   </div>
 </BaseLayout>

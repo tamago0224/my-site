@@ -9,6 +9,7 @@ image:
   alt: Astroのロゴ
 tags: ["ubuntu", "tarraform", "memo"]
 ---
+
 # Terraformを使ってUbuntu 20.04上にVMを作成する
 
 ## 概要
@@ -55,9 +56,10 @@ terraformの`libvirt-provider`を通してKVM上にVMを作成し、コンソー
 ```bash
 $ mkdir -p ~/project/terraform-libvirt-proj && cd ~/project/terraform-libvirt-proj
 ```
+
 terraformのファイルを用意します。ファイル名は`main.tf`とします。各リソースの詳細は`libvirt-provider`の[ドキュメント](https://registry.terraform.io/providers/dmacvicar/libvirt/latest/docs)を参照してください。
 
-```terraform
+```hcl
 terraform {
   required_version = "~> 1.1.0"
   required_providers {
@@ -200,7 +202,7 @@ ethernets:
 
 続いて、`main.tf`の内容を修正します。ネットワーク設定用の`template_file`と`libvirt_cloudinit_disk`で`network_config`が指定されています。
 
-```text
+```
 terraform {
   required_version = "~> 1.1.0"
   required_providers {
@@ -285,7 +287,6 @@ $ terraform apply -auto-approve
 
 ログイン後、`ip address`コマンドでネットワークインターフェースの割り当てを確認すると、`network_config.cfg`ファイルで指定したIPアドレスが割り当てられていることが確認できると思います。
 
-
 ## 参考資料
 
 - terraformをインストールする:
@@ -295,4 +296,3 @@ $ terraform apply -auto-approve
   - <https://github.com/dmacvicar/terraform-provider-libvirt/tree/main/examples/v0.13/ubuntu>
 - ネットワーク設定を行う
   - <https://github.com/dmacvicar/terraform-provider-libvirt/tree/main/examples/v0.13/ubuntu>
-

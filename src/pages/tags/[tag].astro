@@ -1,21 +1,15 @@
 ---
 import BlogPost from "../../components/BlogPost.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllPosts, getPostsByTag, getPostTags } from "../../lib/posts";
 
 export async function getStaticPaths() {
-  const allPosts = await Astro.glob("../posts/*.md");
+  const allPosts = getAllPosts();
 
-  const uniqueTag = [
-    ...new Set(allPosts.map((post) => post.frontmatter.tags).flat()),
-  ];
-
-  return uniqueTag.map((tag) => {
-    const filteredPosts = allPosts.filter((post) =>
-      post.frontmatter.tags?.includes(tag),
-    );
+  return getPostTags(allPosts).map((tag) => {
     return {
       params: { tag },
-      props: { posts: filteredPosts },
+      props: { posts: getPostsByTag(allPosts, tag) },
     };
   });
 }
@@ -26,7 +20,9 @@ const { posts } = Astro.props;
 
 <BaseLayout pageTitle={tag} browserTitle={`tamago tech - ${tag}`}>
   <p class="text-xs font-mono mb-6 text-term-gray dark:text-term-gray">
-    <span class="text-accent dark:text-accent-light">$</span> posts --tag=<span class="tag-badge">{tag}</span>
+    <span class="text-accent dark:text-accent-light">$</span> posts --tag=<span
+      class="tag-badge">{tag}</span
+    >
   </p>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {

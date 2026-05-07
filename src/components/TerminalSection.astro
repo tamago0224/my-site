@@ -1,0 +1,13 @@
+---
+const { command, class: className = "", style } = Astro.props;
+---
+
+<section
+  class={`w-full max-w-2xl animate-fade-in-up text-left ${className}`}
+  style={style}
+>
+  <h2 class="text-base font-bold mb-4 text-accent dark:text-accent-light">
+    <span class="text-term-gray dark:text-term-gray mr-1">$</span>{command}
+  </h2>
+  <slot />
+</section>

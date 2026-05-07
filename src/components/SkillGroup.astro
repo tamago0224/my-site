@@ -1,0 +1,25 @@
+---
+const { title, items, variant = "primary" } = Astro.props;
+
+const badgeClass =
+  variant === "secondary"
+    ? "border-accent-secondary/40 dark:border-accent-secondary-light/40 text-accent-secondary dark:text-accent-secondary-light"
+    : "border-accent/40 dark:border-accent-light/40 text-accent dark:text-accent-light";
+---
+
+<div class="term-card p-4">
+  <h3
+    class="text-sm font-semibold mb-3 text-gray-500 dark:text-term-gray uppercase tracking-widest"
+  >
+    // {title}
+  </h3>
+  <div class="flex flex-wrap gap-2">
+    {
+      items.map((item) => (
+        <span class={`px-2 py-0.5 border text-xs font-mono ${badgeClass}`}>
+          {item.toLowerCase()}
+        </span>
+      ))
+    }
+  </div>
+</div>

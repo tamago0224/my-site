@@ -9,6 +9,7 @@ image:
   alt: Astroのロゴ
 tags: ["kubernetes", "memo"]
 ---
+
 # kubernetesクラスタを作成する
 
 ## 概要
@@ -18,13 +19,12 @@ Ubuntu 20.04のホストを使って、kubernetes 1.23.5でクラスタを作成
 
 ### クラスタとして使うVM情報
 
-|VM名|メモリ|CPU|ディスク|
-|:---|:---|:---|:---|
-|k8s-master01|8GB|4|500GB|
-|k8s-worker01|8GB|4|500GB|
-|k8s-worker02|8GB|4|500GB|
-|k8s-worker03|8GB|4|500GB|
-
+| VM名         | メモリ | CPU | ディスク |
+| :----------- | :----- | :-- | :------- |
+| k8s-master01 | 8GB    | 4   | 500GB    |
+| k8s-worker01 | 8GB    | 4   | 500GB    |
+| k8s-worker02 | 8GB    | 4   | 500GB    |
+| k8s-worker03 | 8GB    | 4   | 500GB    |
 
 ## 手順
 
@@ -106,7 +106,7 @@ $ containerd config default | sudo tee /etc/containerd/config.toml
 `containerd`でcgroupはsystemdのものを使うために、設定ファイルを修正します。
 上の手順で書き換えた設定ファイルの`[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]`セクションにある`SystemdCgroup`プロパティを`true`に書き換えて再起動させます。
 
-```$bash
+```bash
 $ sudo systemctl restart containerd
 ```
 
@@ -145,7 +145,7 @@ kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta3
 kubernetesVersion: v1.23.5
 networking:
-        podSubnet: "172.16.0.0/16"
+  podSubnet: "172.16.0.0/16"
 ---
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -207,7 +207,6 @@ k8s-worker03   Ready    <none>                 4h3m    v1.23.5
 ワーカーノードがクラスタに参加できているので、想定通り１台のマスターノード、3台のワーカーノードの状態になっています。
 
 あとはここにいろいろなアプリケーションをデプロイしてきたいですが、そちらの手順は別の記事にしたいと思います。（まだそこまでできてないだけ...）
-
 
 ## 参考資料
 
